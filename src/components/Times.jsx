@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Times() {
   const [times, setTimes] = useState([]);
@@ -7,16 +8,18 @@ function Times() {
   useEffect(() => {
     async function fetchTimes() {
       try {
-        const response = await axios.get(
+        const dataTimes = await axios.get(
           "https://api.cartola.globo.com/clubes"
         );
-        const timesData = response.data;
-        console.log("Times:", timesData);
+        const allDataTimes = dataTimes.data;
 
-        const timesArray = Object.values(timesData);
-        // object.keys seria bom tambem mas nao faria sentido aqui se nao é pra pegar chave nenhuma
+        const timesArray = Object.values(allDataTimes);
+        // object.keys serve pra pegar os indices de cad aitem no objeto, no caso nao é necessario agora
 
-        const todosTimes = timesArray.filter((time) => time.id !== 1);
+        const todosTimes = timesArray.filter((time) => time.id !== 1);//tirar o time com id 1
+
+        // console.log(timesArray)
+        // console.log(allDataTimes)
 
         if (Array.isArray(todosTimes)) {
           setTimes(todosTimes);
@@ -32,14 +35,31 @@ function Times() {
 
   return (
     <div>
-      <h1>Lista de Times</h1>
-      <ul>
+      <div>
+        <img
+          className="img-cartola"
+          src="https://logodownload.org/wp-content/uploads/2017/05/cartola-fc-logo-5.png"
+          alt=""
+        />
+      </div>
+      <ul className="estilo-ul-lista-times">
         {times.map((time) => (
           <li key={time.id}>
-            <div>
-              <span>{time.nome}</span>
-              <span>{time.apelido}</span>
-            </div>
+            <Link to={`/jogador/${time.id}`}>
+              <div className="time-items-list">
+                <div>
+                  <img
+                    className="time-img-escudo"
+                    src={time.escudos["30x30"]}
+                    alt={`${time.nome} Escudo`}
+                  />
+                </div>
+                <div className="nome-apelido-times">
+                  <span className="nome-time">{time.nome}</span>
+                  <span className="apelido-time">{time.apelido}</span>
+                </div>
+              </div>
+            </Link>
           </li>
         ))}
       </ul>
