@@ -5,6 +5,7 @@ import "../App.css";
 
 function Jogadores() {
   const [jogadores, setJogadores] = useState([]);
+  const [timesData, setTimesData] = useState({});
   const { id } = useParams();
 
   useEffect(() => {
@@ -18,15 +19,16 @@ function Jogadores() {
         if (Array.isArray(jogadoresData)) {
           const updatedJogadoresData = jogadoresData.map((player) => ({
             ...player,
-            foto: player.foto.replace("FORMATO", "220x220"),
+            foto: player.foto?.replace("FORMATO", "220x220"),
           }));
           setJogadores(updatedJogadoresData);
-          // console.log(updatedJogadoresData);
-          // console.log(jogadoresData)
-          // console.log(player)
         }
-        //Array.array é usado pra determinar o valor de um array.
-        //retorna verdadeira se for array e falso se n for.
+
+        // Fetch team data
+        const timesResponse = await axios.get(
+          "https://api.cartola.globo.com/clubes"
+        );
+        setTimesData(timesResponse.data);
       } catch (error) {
         console.error("Erro:", error);
       }
@@ -45,7 +47,7 @@ function Jogadores() {
       </div>
       <ul className="estilo-ul-lista-times">
         <div>
-          <span className="nome-times-jogadores">Jogadores do Grêmio</span>
+          <span className="nome-times-jogadores"> Jogadores do {timesData[id]?.nome || "Unknown Team"}</span>
         </div>
         {jogadores.map((player) => (
           <li className="nome-jogador-e-foto" key={player.atleta_id}>
@@ -56,7 +58,9 @@ function Jogadores() {
                 alt={player.apelido}
               />
             </div>
-            {player.apelido}
+            <span>
+              {player.apelido}
+            </span>
           </li>
         ))}
       </ul>
