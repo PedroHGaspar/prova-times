@@ -16,10 +16,10 @@ function Times() {
         const timesArray = Object.values(allDataTimes);
         // object.keys serve pra pegar os indices de cad aitem no objeto, no caso nao é necessario agora
 
-        const todosTimes = timesArray.filter((time) => time.id !== 1);//tirar o time com id 1
+        const todosTimes = timesArray.filter((time) => time.id !== 1); //tirar o time com id 1
 
-        // console.log(timesArray)
-        // console.log(allDataTimes)
+        console.log("TIMES ARRAY", timesArray);
+        console.log("ALLDATATIMES", allDataTimes);
 
         if (Array.isArray(todosTimes)) {
           setTimes(todosTimes);
